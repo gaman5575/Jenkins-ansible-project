@@ -1,0 +1,11 @@
+users:
+    - username: suraj
+      password: "{{ 'suraj@123' | password_hash('sha512') }}"
+    - username: vikas
+      password: "{{ 'vikas@123' | password_hash('sha512') }}"
+    - username: gautam
+      password: "{{ 'gautam@123 | password_hash('sha512') }}"
+    - username: manya
+      password: "{{ 'manya@123' | password_hash('512') }}"
+    - username: rachna
+      password: "{{ 'rachna' | password_hash('512') }}"
