@@ -9,16 +9,16 @@
       ansible.builtin.user:
         name: "{{ item.username }}"
         password: "{{ item.password }}"
-        state: present
+        state: absent
         update_password: on_create
       loop: "{{ users }}"
 
-    - name: Change password on first login
-      ansible.builtin.command:
-        cmd: chage -d 0 "{{ item.username }}"
-      register: my_output
-      changed_when: my_output.rc == 0
-      loop: "{{ users }}"
+    # - name: Change password on first login
+    #   ansible.builtin.command:
+    #     cmd: chage -d 0 "{{ item.username }}"
+    #   register: my_output
+    #   changed_when: my_output.rc == 0
+    #   loop: "{{ users }}"
 
 - name: Adding some services
   hosts: all
@@ -34,5 +34,5 @@
     - name: Installing services on RHEL machine
       ansible.builtin.dnf:
         name: "{{ item }}"
-        state: present
+        state: absent
       loop: "{{ packages }}"
