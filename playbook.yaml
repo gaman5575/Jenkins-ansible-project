@@ -1,22 +1,24 @@
 ---
-- name: This playbook use for jenkins pipeline
+- name: This playbook is used for Jenkins pipeline
   hosts: all
   become: true
   vars_files:
     - user-pass.txt
   tasks:
-    - name: Adding Some Users and Given passwords
+    - name: Adding some users and given passwords
       ansible.builtin.user:
         name: "{{ item.username }}"
         password: "{{ item.password }}"
         state: present
         update_password: on_create
+      loop: "{{ users }}"
+
     - name: Change password on first login
-      ansible.builtin.command: chage - d 0 "{{ item.username }}"
+      ansible.builtin.command:
+        cmd: chage -d 0 "{{ item.username }}"
       register: my_output
-      changed_when: my_output
-      loop:
-        - "{{ users }}"
+      changed_when: my_output.rc == 0
+      loop: "{{ users }}"
 
 - name: Adding some services
   hosts: all
@@ -26,15 +28,16 @@
       - httpd
       - mariadb
       - postgresql
-      - chronyd
+      - chrony
       - vsftpd
   tasks:
-    - name: Installing serivces on RHEL machine
+    - name: Installing services on RHEL machine
       ansible.builtin.dnf:
         name: "{{ item }}"
         state: present
       loop: "{{ packages }}"
-    - name: Starting service
+
+    - name: Starting and enabling services
       ansible.builtin.service:
         name: "{{ item }}"
         state: started
