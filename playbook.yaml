@@ -36,10 +36,3 @@
         name: "{{ item }}"
         state: present
       loop: "{{ packages }}"
-
-    - name: Starting and enabling services
-      ansible.builtin.service:
-        name: "{{ item }}"
-        state: started
-        enabled: true
-      loop: "{{ packages }}"
